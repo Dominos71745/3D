@@ -3,7 +3,7 @@ import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/js
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const loader = new GLTFLoader(); // Define a new loader
-const renderer = new THREE.WebGLRenderer(); // Define a new renderer
+const renderer = new THREE.WebGLRenderer({ alpha: true }); // Define a new renderer
 
 const scene = new THREE.Scene(); // Define a new scene
 let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); // Define a new camera
@@ -34,16 +34,18 @@ loader.load(
         object.position.y = -1;
         let cameras = gltf.cameras;
         scene.add(object);
-        // You can now access the cameras and lights if they are present
+
         if (cameras && cameras.length > 0) {
-            // Cameras are available, you can iterate over them if needed
             cameras.forEach(function (loadedCamera) {
-                // Do something with each camera
                 console.log("Camera found:", camera);
                 camera = loadedCamera;
+                camera.position.x -= 0.9;
+                camera.position.y += 0.3;
             });
         }
+
         controls = new OrbitControls(camera, renderer.domElement);
+        controls.update();
         controls.enableZoom = false;
     },
     function (xhr) {
@@ -55,14 +57,23 @@ loader.load(
 );
 
 document.getElementById("container3D").appendChild(renderer.domElement); // Add the renderer to the DOM
+document.getElementById("container3D").addEventListener("mousemove", function (event) {
+    mouseX = event.clientX - window.innerWidth / 2;
+    mouseY = event.clientY - window.innerHeight / 2;
+});
 
 renderer.shadowMap.enabled = true; // Enable shadow rendering in the renderer
 
 function animate() {
     requestAnimationFrame(animate);
     if (isMouseClicked) {
-        object.rotation.y = -2 + (mouseX / window.innerWidth) * 3;
-        object.rotation.x = -0.9 + (mouseY * 2.5) / window.innerHeight;
+        // Obliczamy różnicę kąta obrotu na podstawie pozycji myszy
+        let targetRotationX = (mouseY / window.innerHeight) * Math.PI * 2;
+        let targetRotationY = (mouseX / window.innerWidth) * Math.PI * 2;
+
+        // Obracamy obiekt w kierunku docelowego obrotu
+        object.rotation.x += (targetRotationX - object.rotation.x) * 0.05;
+        object.rotation.y += (targetRotationY - object.rotation.y) * 0.05;
     }
     renderer.render(scene, camera);
 }
