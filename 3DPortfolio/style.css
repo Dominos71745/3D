@@ -1,0 +1,27 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: "Bricolage Grotesque", sans-serif;
+    overflow-x: hidden;
+}
+
+.hero {
+    color: white;
+    position: relative;
+    height: 100vh;
+}
+
+.hero canvas {
+    position: absolute;
+    top: 0;
+}
+
+h1 {
+    position: relative;
+    z-index: 1;
+    margin-top: 20px;
+    font-size: 100px;
+    text-align: center;
+    padding: 20px;
+    letter-spacing: 5px;
+}
