@@ -31,7 +31,7 @@ loader.load(
     "models/desk/scene.gltf",
     function (gltf) {
         object = gltf.scene;
-        object.position.y = -1;
+        object.position.y = -0.3;
         let cameras = gltf.cameras;
         scene.add(object);
 
@@ -39,8 +39,6 @@ loader.load(
             cameras.forEach(function (loadedCamera) {
                 console.log("Camera found:", camera);
                 camera = loadedCamera;
-                camera.position.x -= 0.9;
-                camera.position.y += 0.3;
             });
         }
 
